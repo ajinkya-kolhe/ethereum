@@ -6,6 +6,7 @@ const { interface, bytecode } = require('../compile')
 require('events').EventEmitter.defaultMaxListeners = 15;
 
 const DEFAULT_MESSAGE = 'Hello World'
+const UPDATED_MESSAGE = 'Message Updated'
 let accounts, inbox
 
 beforeEach(async () => {
@@ -23,5 +24,11 @@ describe('Inbox', () => {
   it('should get a default message', async () => {
     const message = await inbox.methods.message().call()
     assert.equal(message, DEFAULT_MESSAGE)
+  })
+
+  it('should change the message', async () => {
+    await inbox.methods.setMessage(UPDATED_MESSAGE).send({ from: accounts[0], })
+    const message = await inbox.methods.message().call()
+    assert.equal(message, UPDATED_MESSAGE)
   })
 })
